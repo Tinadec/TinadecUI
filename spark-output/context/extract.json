@@ -1,0 +1,29 @@
+{
+  "skill": "extract",
+  "generated_at": "2026-08-28T00:00:00+08:00",
+  "meta": {
+    "mode": "internal",
+    "mode_resolved_by": "explicit",
+    "source": { "type": "internal", "repo_path": "C:/git/agent/TinadecOffice" },
+    "target_framework": ["tailwind", "css-vars"],
+    "ask_answers": { "deliverable_choice": "A", "confirmed_at": "2026-08-28T00:00:00+08:00" },
+    "internal_scan": {
+      "framework": "vue3 + tailwindcss@4.3",
+      "css_in_js_engine": "none",
+      "token_sources": ["apps/desktop/src/styles.css L1-370", "apps/desktop/src/styles.css L4894-5144"]
+    },
+    "fallback_applied": ["no-sparkdesign-baseline"]
+  },
+  "artifacts": {
+    "design_md": "C:/git/agent/TinadecUI/design.md",
+    "tokens_css": "C:/git/agent/TinadecUI/src/styles/tokens.css",
+    "fonts_css": "C:/git/agent/TinadecUI/src/styles/fonts.css"
+  },
+  "tokens_summary": {
+    "color_layers": ["shadcn HSL (hue-222 light/dark)", "semantic Codex-style (light #ffffff/#f6f8fa, dark #0a0e14/#11151c, teal accent #1f8f80/#2ec4b6)"],
+    "typography": "Geist Variable (@fontsource-variable/geist)",
+    "radius": "0.5rem base, lg/md/sm derived",
+    "motion": ["chat-shimmer", "chat-status-rise", "chat-collapse", "activity-glow-icon"]
+  },
+  "handoff_hint": "# 设计上下文\n本项目的设计语言已由 /extract 从 TinadecOffice 内部提取，参考：\n- 完整 design.md：C:/git/agent/TinadecUI/design.md\n- Token CSS：C:/git/agent/TinadecUI/src/styles/tokens.css\n生成 UI 组件时，所有 color / spacing / radius / shadow 必须从上述 token 中选取，不得自创。@tinadec/ui 已有原语优先复用。"
+}

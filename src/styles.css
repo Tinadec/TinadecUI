@@ -1,0 +1,52 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@tinadec/ui/styles/fonts.css";
+@import "@tinadec/ui/styles/tokens.css";
+
+/* Tailwind v4 does not scan node_modules by default; collect the primitive
+   classes from the linked @tinadec/ui package sources. */
+@source "../node_modules/@tinadec/ui/src";
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-size: 15px;
+}
+
+/* Hero ambient glow */
+.hero-glow {
+  background:
+    radial-gradient(600px 280px at 50% 0%, var(--accent-soft), transparent 70%);
+}
+
+/* Typewriter caret */
+.type-caret::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: var(--accent-primary);
+  animation: caret-blink 1s steps(2) infinite;
+}
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-caret::after {
+    animation: none;
+  }
+}
