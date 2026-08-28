@@ -14,7 +14,7 @@ defineProps<Props>()
       <div v-if="eyebrow" class="mb-3 text-xs font-semibold tracking-widest text-[var(--text-brand)] uppercase">
         {{ eyebrow }}
       </div>
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">{{ title }}</h2>
+      <h2 class="text-4xl font-extrabold tracking-tight text-balance sm:text-5xl">{{ title }}</h2>
       <p v-if="subtitle" class="mt-3 max-w-2xl text-base text-[var(--text-secondary)]">{{ subtitle }}</p>
       <div class="mt-10">
         <slot />

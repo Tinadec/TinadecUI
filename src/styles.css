@@ -21,10 +21,124 @@ body {
   font-size: 15px;
 }
 
-/* Hero ambient glow */
+.mono,
+code {
+  font-family: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+
+/* ---------------------------------------------------------------------------
+   Tinadec brand accent — marketing-site-only override of the shared tokens.
+   Brand: steel-navy #1E3A58 anchor (hue-210 deep blue — classic tech/enterprise
+   "ink" color, one step lighter than the original #102030 for presence).
+   Light mode: #1E3A58 drives CTAs/links with white labels (~11:1 contrast);
+   the glow/soft end lifts to #2E5378, selected tints to a pale steel blue.
+   Dark mode: buttons lift to #2A4C70 so they stay visible on the gray
+   surface (white label), accent end #8FB3D9 for text/icons/focus.
+   NOTE: styles.css loads after tokens.css with equal specificity, so every
+   variable overridden here must be re-set for BOTH modes or dark mode will
+   inherit the light value — e.g. --foreground/--text-primary are re-lifted
+   to the light tokens (#E6EDF3 / #C9D1D9) in .dark below.
+   The TinadecOffice product page (ProductOfficePage.vue) re-overrides the
+   green vars with the teal logo palette (#1F8F80 / #2EC4B6).
+--------------------------------------------------------------------------- */
+
+:root {
+  --foreground: #1f2328;
+  --text-primary: #1f2328;
+  --primary: #1e3a58;
+  --ring: #1e3a58;
+  --accent-primary: #1e3a58;
+  --accent-success: #1e3a58;
+  --accent-brand: #2e5378;
+  --text-brand: #1e3a58;
+  --border-input-focus: #1e3a58;
+  --bg-selected: #e0eaf4;
+  --bg-selected-outline: #1e3a58;
+  --accent-soft: rgba(30, 58, 88, 0.12);
+  --accent-soft-2: rgba(46, 83, 120, 0.1);
+  /* Agent-activity status hues (WorkbenchMock) — kept out of the brand
+     triplet so thinking/working stay violet/blue next to completed green. */
+  --status-thinking: #7c3aed;
+  --status-working: #0969da;
+}
+
+/* Dark mode — Codex-style gray family (background untouched); steel-navy
+   lifted just enough for contrast on dark surfaces. Text vars are re-set
+   to the light tokens here (see note above). */
+.dark {
+  --bg-primary: #0b0d0f;
+  --bg-secondary: #101215;
+  --surface-chrome: #101215;
+  --surface-section: #14171a;
+  --surface-raised: #1a1e22;
+  --surface-hover: #1d2126;
+  --surface-active: #0b0d0f;
+  --surface-button: #1a1e22;
+  --surface-button-hover: #232830;
+  --surface-input: #0e1013;
+  --border-default: #262b31;
+  --border-muted: #1b1f24;
+  --text-secondary: #a2a9b1;
+  --text-muted: #7e8690;
+  --foreground: #e6edf3;
+  --text-primary: #c9d1d9;
+  --primary: #2a4c70;
+  --primary-foreground: #ffffff;
+  --ring: #8fb3d9;
+  --accent-primary: #8fb3d9;
+  --accent-success: #8fb3d9;
+  --accent-brand: #8fb3d9;
+  --text-brand: #8fb3d9;
+  --border-input-focus: #8fb3d9;
+  --bg-selected: #17283a;
+  --bg-selected-outline: #8fb3d9;
+  --accent-soft: rgba(143, 179, 217, 0.15);
+  --accent-soft-2: rgba(42, 76, 112, 0.16);
+  --status-thinking: #a78bfa;
+  --status-working: #58a6ff;
+}
+
+/* Hero ambient glow — green layered radial, the brand triplet halo */
 .hero-glow {
   background:
-    radial-gradient(600px 280px at 50% 0%, var(--accent-soft), transparent 70%);
+    radial-gradient(860px 420px at 50% -14%, var(--accent-soft), transparent 70%),
+    radial-gradient(560px 280px at 82% 6%, var(--accent-soft-2), transparent 72%);
+}
+
+/* Terminal lines fade in, staggered */
+.term-line {
+  animation: term-line-in 0.45s cubic-bezier(0.3, 0.7, 0.4, 1) both;
+}
+
+@keyframes term-line-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Terminal body — mirrors the real TinadecOffice xterm.js rendering:
+   Cascadia Code / Fira Code / JetBrains Mono stack, 13px, line-height 1.2. */
+.term-body {
+  font-family: "Cascadia Code", "Fira Code", "JetBrains Mono", Consolas, "SF Mono", ui-monospace, monospace;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* Terminal bar caret — xterm.js `cursorStyle: 'bar'` */
+.term-caret::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  margin-left: 5px;
+  vertical-align: -0.15em;
+  background: var(--accent-primary);
+  animation: caret-blink 1.1s steps(2) infinite;
 }
 
 /* Typewriter caret */
@@ -46,7 +160,11 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .type-caret::after {
+  .type-caret::after,
+  .term-caret::after,
+  .term-line {
     animation: none;
   }
 }
+
+

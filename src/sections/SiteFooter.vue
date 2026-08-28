@@ -9,26 +9,26 @@ const cols = [
   {
     title: 'footer.product',
     links: [
-      { label: 'nav.product', href: '#workbench' },
-      { label: 'nav.architecture', href: '#architecture' },
-      { label: 'nav.governance', href: '#governance' },
-      { label: 'footer.market', href: '#top' },
+      { label: 'nav.products', to: '/products' },
+      { label: 'nav.architecture', to: '/architecture' },
+      { label: 'nav.governance', to: '/#governance' },
+      { label: 'footer.market', to: '/products' },
     ],
   },
   {
     title: 'footer.resources',
     links: [
-      { label: 'footer.docs', href: '#top' },
-      { label: 'footer.changelog', href: '#top' },
-      { label: 'nav.download', href: '#top' },
+      { label: 'footer.docs', to: '/architecture' },
+      { label: 'footer.changelog', to: '/products' },
+      { label: 'nav.download', to: '/' },
     ],
   },
   {
     title: 'footer.legal',
     links: [
-      { label: 'footer.terms', href: '#top' },
-      { label: 'footer.privacy', href: '#top' },
-      { label: 'footer.license', href: '#top' },
+      { label: 'footer.terms', to: '/' },
+      { label: 'footer.privacy', to: '/' },
+      { label: 'footer.license', to: '/' },
     ],
   },
 ]
@@ -48,12 +48,12 @@ const cols = [
 
         <nav v-for="col in cols" :key="col.title" class="text-sm">
           <div class="mb-3 text-xs font-semibold tracking-wider text-[var(--text-muted)] uppercase">{{ t(col.title) }}</div>
-          <a
+          <router-link
             v-for="l in col.links"
             :key="l.label"
-            :href="l.href"
+            :to="l.to"
             class="block py-1 text-[var(--text-secondary)] transition-colors hover:text-[var(--text-primary)]"
-          >{{ t(l.label) }}</a>
+          >{{ t(l.label) }}</router-link>
         </nav>
       </div>
 
