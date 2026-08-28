@@ -1,0 +1,21 @@
+@import "tailwindcss";
+@import "@tinadec/ui/styles/fonts.css";
+@import "@tinadec/ui/styles/tokens.css";
+
+/* Collect primitive classes from the @tinadec/ui sources (Tailwind v4 does not
+   scan node_modules by default; here the package root is ../src). */
+@source "../src";
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "Geist Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 15px;
+}
+
+code,
+.mono {
+  font-family: "Geist Mono Variable", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
