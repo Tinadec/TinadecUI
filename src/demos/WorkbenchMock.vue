@@ -413,15 +413,15 @@ onMounted(() => seed())
   color: var(--status-thinking);
 }
 .wb-banner.wb-waiting .wb-banner-icon {
-  background: rgba(210, 153, 34, 0.12);
+  background: color-mix(in srgb, var(--accent-warning) 12%, transparent);
   color: var(--accent-warning);
 }
 .wb-banner.wb-error .wb-banner-icon {
-  background: rgba(248, 81, 73, 0.12);
+  background: color-mix(in srgb, var(--accent-danger) 12%, transparent);
   color: var(--accent-danger);
 }
 .wb-banner.wb-completed .wb-banner-icon {
-  background: rgba(63, 185, 80, 0.12);
+  background: color-mix(in srgb, var(--accent-success) 12%, transparent);
   color: var(--accent-success);
 }
 .wb-role {

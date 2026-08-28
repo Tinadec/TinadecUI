@@ -28,12 +28,16 @@ code {
 
 /* ---------------------------------------------------------------------------
    Tinadec brand accent — marketing-site-only override of the shared tokens.
-   Brand: steel-navy #1E3A58 anchor (hue-210 deep blue — classic tech/enterprise
-   "ink" color, one step lighter than the original #102030 for presence).
-   Light mode: #1E3A58 drives CTAs/links with white labels (~11:1 contrast);
-   the glow/soft end lifts to #2E5378, selected tints to a pale steel blue.
-   Dark mode: buttons lift to #2A4C70 so they stay visible on the gray
-   surface (white label), accent end #8FB3D9 for text/icons/focus.
+   Brand palette (user-specified, 19-color set) — OLIVE PRIMARY: olive
+   #6A8844 drives the brand (buttons/links/icons), with a lifted, less
+   muddy #64843C (white label ~4.2:1) for light CTAs/links per user
+   feedback, and #7FA24F / #8FAE66 for dark-mode buttons/accents.
+   Teal #2FBCB4 stays as the
+   glow/ambient end; terracotta #7F3838 for danger; the green-gray ramp
+   (#171D18 ... #E9F3F3) for text/borders.
+   Dark mode: #7FA24F buttons (dark label), accent end #8FAE66 for
+   text/icons/focus, success #8FAE66, danger lifts to #D88F8F so it stays
+   legible on the gray surface.
    NOTE: styles.css loads after tokens.css with equal specificity, so every
    variable overridden here must be re-set for BOTH modes or dark mode will
    inherit the light value — e.g. --foreground/--text-primary are re-lifted
@@ -43,28 +47,33 @@ code {
 --------------------------------------------------------------------------- */
 
 :root {
-  --foreground: #1f2328;
-  --text-primary: #1f2328;
-  --primary: #1e3a58;
-  --ring: #1e3a58;
-  --accent-primary: #1e3a58;
-  --accent-success: #1e3a58;
-  --accent-brand: #2e5378;
-  --text-brand: #1e3a58;
-  --border-input-focus: #1e3a58;
-  --bg-selected: #e0eaf4;
-  --bg-selected-outline: #1e3a58;
-  --accent-soft: rgba(30, 58, 88, 0.12);
-  --accent-soft-2: rgba(46, 83, 120, 0.1);
+  --foreground: #171d18;
+  --text-primary: #171d18;
+  --text-secondary: #3d4d44;
+  --text-muted: #6d7877;
+  --border-default: #c3dada;
+  --border-muted: #d7e6e6;
+  --primary: #64843c;
+  --ring: #6a8844;
+  --accent-primary: #6a8844;
+  --accent-success: #6a8844;
+  --accent-danger: #7f3838;
+  --accent-brand: #2fbcb4;
+  --text-brand: #64843c;
+  --border-input-focus: #6a8844;
+  --bg-selected: #e9f3f3;
+  --bg-selected-outline: #6a8844;
+  --accent-soft: rgba(100, 132, 60, 0.16);
+  --accent-soft-2: rgba(47, 188, 180, 0.12);
   /* Agent-activity status hues (WorkbenchMock) — kept out of the brand
      triplet so thinking/working stay violet/blue next to completed green. */
   --status-thinking: #7c3aed;
   --status-working: #0969da;
 }
 
-/* Dark mode — Codex-style gray family (background untouched); steel-navy
-   lifted just enough for contrast on dark surfaces. Text vars are re-set
-   to the light tokens here (see note above). */
+/* Dark mode — gray family (background untouched); teal accent lifted for
+   the dark surfaces. Text vars are re-set to the light tokens here (see
+   note above). */
 .dark {
   --bg-primary: #0b0d0f;
   --bg-secondary: #101215;
@@ -76,24 +85,25 @@ code {
   --surface-button: #1a1e22;
   --surface-button-hover: #232830;
   --surface-input: #0e1013;
-  --border-default: #262b31;
-  --border-muted: #1b1f24;
-  --text-secondary: #a2a9b1;
-  --text-muted: #7e8690;
+  --border-default: #2a332a;
+  --border-muted: #171d18;
+  --text-secondary: #bac7c3;
+  --text-muted: #959d91;
   --foreground: #e6edf3;
   --text-primary: #c9d1d9;
-  --primary: #2a4c70;
-  --primary-foreground: #ffffff;
-  --ring: #8fb3d9;
-  --accent-primary: #8fb3d9;
-  --accent-success: #8fb3d9;
-  --accent-brand: #8fb3d9;
-  --text-brand: #8fb3d9;
-  --border-input-focus: #8fb3d9;
-  --bg-selected: #17283a;
-  --bg-selected-outline: #8fb3d9;
-  --accent-soft: rgba(143, 179, 217, 0.15);
-  --accent-soft-2: rgba(42, 76, 112, 0.16);
+  --primary: #7fa24f;
+  --primary-foreground: #111c08;
+  --ring: #8fae66;
+  --accent-primary: #8fae66;
+  --accent-success: #8fae66;
+  --accent-danger: #d88f8f;
+  --accent-brand: #2fbcb4;
+  --text-brand: #8fae66;
+  --border-input-focus: #8fae66;
+  --bg-selected: #2a332a;
+  --bg-selected-outline: #8fae66;
+  --accent-soft: rgba(143, 174, 102, 0.15);
+  --accent-soft-2: rgba(47, 188, 180, 0.12);
   --status-thinking: #a78bfa;
   --status-working: #58a6ff;
 }

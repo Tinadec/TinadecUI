@@ -1,68 +1,130 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { Check, Languages } from '@lucide/vue'
-import { UiButton } from '@tinadec/ui'
 
 const { locale, t } = useI18n()
 
-const open = ref(false)
-const root = ref<HTMLElement | null>(null)
-
 // 中国站 / 国际站 —— 仅两个明确的站点选项，不含「跟随系统」。
 const options = computed(() => [
-  { value: 'zh-CN', label: t('nav.siteChina'), sub: '简体中文' },
-  { value: 'en', label: t('nav.siteGlobal'), sub: 'English' },
+  { value: 'zh-CN', label: t('nav.siteChina') },
+  { value: 'en', label: t('nav.siteGlobal') },
 ])
 
-const current = computed(
-  () => options.value.find((o) => o.value === locale.value) ?? options.value[0],
-)
+const activeIndex = computed(() => {
+  const i = options.value.findIndex((o) => o.value === locale.value)
+  return i < 0 ? 0 : i
+})
 
 function setLang(value: string) {
   locale.value = value
   localStorage.setItem('tinadec-locale', value)
   document.documentElement.lang = value === 'zh-CN' ? 'zh-CN' : 'en'
-  open.value = false
 }
 
-function onDocClick(e: MouseEvent) {
-  if (root.value && !root.value.contains(e.target as Node)) open.value = false
+/* ---- Qoder-style slider: the thumb rests on the active language. Click a
+        slot to jump, or drag the thumb — wherever it lands is the locale. ---- */
+const trackEl = ref<HTMLElement | null>(null)
+const thumbEl = ref<HTMLElement | null>(null)
+const dragging = ref(false)
+const dragPx = ref<number | null>(null)
+let startPointerX = 0
+let startThumbLeft = 0
+
+const thumbStyle = computed(() => ({
+  width: `calc((100% - 4px) / ${options.value.length})`,
+  transform:
+    dragPx.value !== null
+      ? `translateX(${dragPx.value}px)`
+      : `translateX(${activeIndex.value * 100}%)`,
+}))
+
+function onTrackDown(e: PointerEvent) {
+  const track = trackEl.value
+  const thumb = thumbEl.value
+  if (!track || !thumb) return
+  const tr = track.getBoundingClientRect()
+  const tw = tr.width
+  const bw = thumb.getBoundingClientRect().width
+  const step = (tw - bw) / (options.value.length - 1)
+  const thumbLeft = activeIndex.value * step
+  const x = e.clientX - tr.left
+
+  if (x >= thumbLeft && x <= thumbLeft + bw) {
+    // 按在滑块上 → 开始拖拽
+    dragging.value = true
+    startPointerX = e.clientX
+    startThumbLeft = thumbLeft
+    dragPx.value = thumbLeft
+    track.setPointerCapture(e.pointerId)
+  } else {
+    // 按在滑块外 → 直接切到该语言
+    const idx = Math.round(x / step)
+    const clamped = Math.max(0, Math.min(options.value.length - 1, idx))
+    setLang(options.value[clamped].value)
+  }
 }
 
-onMounted(() => document.addEventListener('click', onDocClick))
-onBeforeUnmount(() => document.removeEventListener('click', onDocClick))
+function onTrackMove(e: PointerEvent) {
+  if (!dragging.value) return
+  const track = trackEl.value
+  const thumb = thumbEl.value
+  if (!track || !thumb) return
+  const tw = track.getBoundingClientRect().width
+  const bw = thumb.getBoundingClientRect().width
+  const x = startThumbLeft + (e.clientX - startPointerX)
+  dragPx.value = Math.max(0, Math.min(tw - bw, x))
+}
+
+function onTrackUp() {
+  if (!dragging.value) return
+  dragging.value = false
+  const track = trackEl.value
+  const thumb = thumbEl.value
+  if (track && thumb) {
+    const tw = track.getBoundingClientRect().width
+    const bw = thumb.getBoundingClientRect().width
+    const step = (tw - bw) / (options.value.length - 1)
+    const idx = Math.round((dragPx.value ?? 0) / step)
+    const clamped = Math.max(0, Math.min(options.value.length - 1, idx))
+    setLang(options.value[clamped].value)
+  }
+  dragPx.value = null
+}
 </script>
 
 <template>
-  <div ref="root" class="relative">
-    <UiButton variant="ghost" size="sm" class="gap-1.5" :aria-label="current.label" @click="open = !open">
-      <Languages class="h-4 w-4" />
-      <span class="text-xs">{{ current.label }}</span>
-    </UiButton>
-
-    <div
-      v-if="open"
-      class="absolute right-0 top-full z-50 mt-1 min-w-[10rem] overflow-hidden rounded-lg border border-[var(--border-muted)] bg-[var(--surface-raised)] p-1 shadow-lg"
+  <div
+    ref="trackEl"
+    class="relative flex touch-none select-none items-center rounded-full border border-[var(--border-default)] bg-[var(--surface-raised)] p-0.5"
+    role="tablist"
+    aria-label="Language"
+    @pointerdown="onTrackDown"
+    @pointermove="onTrackMove"
+    @pointerup="onTrackUp"
+    @pointercancel="onTrackUp"
+  >
+    <button
+      v-for="o in options"
+      :key="o.value"
+      type="button"
+      role="tab"
+      :aria-selected="o.value === locale"
+      class="pointer-events-none relative z-10 w-20 rounded-full py-1 text-center text-xs font-medium"
+      :class="
+        o.value === locale
+          ? 'text-[var(--text-primary)]'
+          : 'text-[var(--text-muted)]'
+      "
     >
-      <button
-        v-for="o in options"
-        :key="o.value"
-        type="button"
-        class="flex w-full items-center justify-between gap-3 rounded-md px-2.5 py-1.5 text-left transition-colors hover:bg-[var(--surface-hover)]"
-        :class="
-          o.value === locale
-            ? 'text-[var(--text-primary)]'
-            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-        "
-        @click="setLang(o.value)"
-      >
-        <span>
-          <span class="block text-sm">{{ o.label }}</span>
-          <span class="block text-xs opacity-60">{{ o.sub }}</span>
-        </span>
-        <Check v-if="o.value === locale" class="h-3.5 w-3.5 shrink-0 text-[var(--text-brand)]" />
-      </button>
-    </div>
+      {{ o.label }}
+    </button>
+
+    <!-- sliding thumb — drag it anywhere; the slot it lands on becomes the locale -->
+    <div
+      ref="thumbEl"
+      class="pointer-events-none absolute inset-y-0.5 left-0.5 z-0 rounded-full bg-[var(--surface-hover)] shadow-sm ring-1 ring-inset ring-[var(--border-muted)]"
+      :class="dragging ? 'transition-none' : 'transition-transform duration-200 ease-out'"
+      :style="thumbStyle"
+    />
   </div>
 </template>
